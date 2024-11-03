@@ -23,7 +23,7 @@
     // Once all dependencies are fetched, `zig build` no longer requires
     // internet connectivity.
     .dependencies = .{
-        .raylib = .{ .url = "https://github.com/raysan5/raylib/archive/refs/heads/master.tar.gz", .hash = "12204857f2cb559098071b4bea2e1010efeaac2229146f86b304510fd982153149e1" },
+        .raylib = .{ .url = "https://github.com/raysan5/raylib/archive/refs/heads/master.tar.gz", .hash = "122001a806a07c1a457e79451afaa7ac4a4b9f3cf44123f56e6d3eadbcec391785db" },
         // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
         //.example = .{
         //    // When updating this field to a new URL, be sure to delete the corresponding
