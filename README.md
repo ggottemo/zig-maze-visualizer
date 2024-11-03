@@ -1,23 +1,73 @@
-# RayZig - Zig + Raylib Template Project
+# RayZig - Maze Generation & Pathfinding Visualization
 
-RayZig is a template project meant to allow you to quickly start developing your game / application / graphics project in Zig.
+A maze generation and pathfinding visualization project built with Zig and Raylib. This project demonstrates various maze generation algorithms and pathfinding techniques in an interactive visual environment.
 
-RayZig doesn't use any bindings as the Zig compiler compiles C code out of the box.
+## Features
 
-Once you've followed the instructions you should be able to use Raylib in your zig project pretty much how you would in C!
+- Multiple maze generation algorithms:
+  - Recursive Backtracker
+  - Prim's Algorithm
+  - Binary Tree Algorithm
+- Multiple pathfinding algorithms:
+  - Depth-First Search
+  - Breadth-First Search
+  - A* Search
+- Interactive start/end point placement
+- Real-time visualization of generation and solving
+- Clean, modular Zig codebase
 
-### Instructions
+## Getting Started
 
-Simply clone the project onto your local machine:
+1. Clone the project:
+```bash
+git clone https://github.com/yourusername/RayZig.git
+```
 
-```git clone https://github.com/ipinzi/RayZig.git```
+2. Update the Raylib submodule:
+```bash
+git submodule update --init
+```
 
-Then update the git submodule containing the Raylib library:
+3. Build and run:
+```bash
+zig build run
+```
 
-```git submodule update --init```
+## Project Structure
 
-You can then build the Zig project like so:
+- `src/main.zig` - Entry point and window management
+- `src/types.zig` - Core type definitions and constants
+- `src/maze.zig` - Maze data structure
+- `src/button.zig` - UI button component
+- `src/visualizer.zig` - Main visualization and algorithm logic
 
-```zig build run```
+## Usage
 
-You should then see the RayZig window appear.
+1. Select a maze generation algorithm using the top buttons
+2. Click "Generate Maze" to create a new maze
+3. Set start and end points by clicking the respective buttons and then clicking cells in the maze
+4. Select a pathfinding algorithm
+5. Click "Solve Maze" to visualize the pathfinding process
+6. Use "Reset" to start over
+
+## Requirements
+
+- Zig 0.11.0 or later
+- Raylib (included as submodule)
+
+## Building from Source
+
+The project uses Zig's build system. No additional setup is required beyond having Zig installed and initializing the Raylib submodule.
+
+## Contributing
+
+Feel free to open issues or submit pull requests with improvements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Based on the RayZig template by ipinzi
+- Uses Raylib for graphics rendering
