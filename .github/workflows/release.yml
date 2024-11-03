@@ -1,0 +1,45 @@
+name: Release Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.13.0
+
+      - name: Build Release
+        run: |
+          zig build -Doptimize=ReleaseSafe
+          # Move the executable to a more friendly name
+          move zig-out\bin\RayZig.exe zig-out\bin\MazeVisualizer.exe
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          files: zig-out/bin/MazeVisualizer.exe
+          name: Release ${{ github.sha }}
+          tag_name: v${{ github.run_number }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MazeVisualizer-Windows
+          path: zig-out/bin/MazeVisualizer.exe
