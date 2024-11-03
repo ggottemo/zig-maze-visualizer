@@ -17,19 +17,43 @@ jobs:
           submodules: 'recursive'
 
       - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: korandoru/setup-zig@v1
         with:
-          version: 0.13.0
+          zig-version: 0.13.0
 
       - name: Build Release
         run: |
-          zig build -Doptimize=ReleaseSafe
-          # Move the executable to a more friendly name
-          move zig-out\bin\RayZig.exe zig-out\bin\MazeVisualizer.exe
+          Write-Host "Building with Zig..."
+          zig env
+          zig version
+          
+          Write-Host "Building project..."
+          $buildOutput = zig build -Doptimize=ReleaseSafe --verbose 2>&1
+          $buildSuccess = $LASTEXITCODE -eq 0
+          
+          Write-Host "Build output:"
+          $buildOutput | ForEach-Object { Write-Host $_ }
+          
+          if (-not $buildSuccess) {
+            Write-Host "Build failed!"
+            exit 1
+          }
+          
+          Write-Host "Checking build output..."
+          $exePath = "zig-out/bin/MazeVisualizer.exe"
+          if (Test-Path $exePath) {
+            Write-Host "Build successful! Executable found at: $exePath"
+          } else {
+            Write-Host "Build appeared successful but executable not found!"
+            Write-Host "Contents of zig-out/bin:"
+            Get-ChildItem "zig-out/bin" -ErrorAction SilentlyContinue
+            exit 1
+          }
+        shell: pwsh
 
       - name: Create Release
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           files: zig-out/bin/MazeVisualizer.exe
           name: Release ${{ github.sha }}
@@ -39,7 +63,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Artifact
+        if: success()
         uses: actions/upload-artifact@v3
         with:
           name: MazeVisualizer-Windows
           path: zig-out/bin/MazeVisualizer.exe
+
+      - name: Upload Build Logs On Failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: |
+            zig-cache/
+            zig-out/
+            zig-logs/
