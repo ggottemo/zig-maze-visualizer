@@ -52,7 +52,7 @@ zig build run
 
 ## Requirements
 
-- Zig 0.11.0 or later
+- Zig 0.14.0 or later
 - Raylib (included as submodule)
 
 ## Building from Source
